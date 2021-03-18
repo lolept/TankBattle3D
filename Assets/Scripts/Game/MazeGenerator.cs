@@ -1,19 +1,26 @@
 ﻿using System.Collections.Generic;
-using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game
 {
     public class MazeGenerator : MonoBehaviourPunCallbacks
     {
-        private const int Width = 15;
-        private const int Height = 15;
+        private int _width = 15;
+        private int _height = 15;
+        public Dropdown size;
+        public GameObject plane;
 
         public Maze GenerateMaze()
         {
-            var cells = new MazeGeneratorCell[Width, Height];
+            size = GameObject.Find("Size").GetComponent<Dropdown>();
+            _width = size.value + 10;
+            _height = _width;
+            plane = PhotonNetwork.Instantiate("Floor", new Vector3((_width * 10) - 5, 0, (_height * 10) - 5),
+                Quaternion.identity);
+            plane.transform.localScale = new Vector3(_width * 2, 1, _height * 2);
+            var cells = new MazeGeneratorCell[_width, _height];
 
             for (var x = 0; x < cells.GetLength(0); x++)
             {
@@ -25,34 +32,39 @@ namespace Game
 
             for (var x = 0; x < cells.GetLength(0); x++)
             {
-                cells[x, Height - 1].WallLeft = false;
+                cells[x, _height - 1].WallLeft = false;
                 cells[x, 0].WallBottom = false;
                 cells[x, 0].WallCenter = false;
             }
 
             for (var y = 0; y < cells.GetLength(1); y++)
             {
-                cells[Width - 1, y].WallBottom = false;
+                cells[_width - 1, y].WallBottom = false;
                 cells[0, y].WallLeft = false;
                 cells[0, y].WallCenter = false;
             }
 
-            cells[Width - 1, Height - 1].WallCenter = false;
-            cells[0, Height - 1].WallBottom = false;
-            cells[Width - 1, 0].WallLeft = false;
+            cells[_width - 1, _height - 1].WallCenter = false;
+            cells[_width - 1, _height - 2].WallLeft = false;
+            cells[_width - 2, _height - 1].WallBottom = false;
+            cells[0, _height - 1].WallBottom = false;
+            cells[1, _height - 1].WallCenter = false;
+            cells[1, _height - 2].WallLeft = false;
+            cells[_width - 1, 0].WallLeft = false;
+            cells[_width - 2, 1].WallBottom = false;
+            cells[_width - 1, 1].WallCenter = false;
+            cells[0, 1].WallBottom = false;
+            cells[1, 0].WallLeft = false;
+            cells[1, 1].WallCenter = false;
 
             RemoveWallsWithBacktracker(cells);
 
             var maze = new Maze {Cells = cells};
-
-            var options = new RaiseEventOptions {Receivers = ReceiverGroup.Others};
-            var sendOptions = new SendOptions {Reliability = true};
-            //PhotonNetwork.RaiseEvent(69, cells, options, sendOptions);
             return maze;
 
         }
 
-        private static void RemoveWallsWithBacktracker(MazeGeneratorCell[,] maze)
+        private void RemoveWallsWithBacktracker(MazeGeneratorCell[,] maze)
         {
             var current = maze[0, 0];
             current.Visited = true;
@@ -68,8 +80,8 @@ namespace Game
 
                 if (x > 0 && !maze[x - 1, y].Visited) unvisitedNeighbours.Add(maze[x - 1, y]);
                 if (y > 0 && !maze[x, y - 1].Visited) unvisitedNeighbours.Add(maze[x, y - 1]);
-                if (x < Width - 1 && !maze[x + 1, y].Visited) unvisitedNeighbours.Add(maze[x + 1, y]);
-                if (y < Height - 1 && !maze[x, y + 1].Visited) unvisitedNeighbours.Add(maze[x, y + 1]);
+                if (x < _width - 1 && !maze[x + 1, y].Visited) unvisitedNeighbours.Add(maze[x + 1, y]);
+                if (y < _height - 1 && !maze[x, y + 1].Visited) unvisitedNeighbours.Add(maze[x, y + 1]);
 
                 if (unvisitedNeighbours.Count > 0)
                 {

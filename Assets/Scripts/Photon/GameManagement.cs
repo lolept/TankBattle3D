@@ -1,14 +1,17 @@
+using System;
 using System.Threading;
 using Game;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Photon
 {
     public class GameManagement : MonoBehaviourPunCallbacks
     {
+        public Button StartBtn;
         public void Leave()
         {
             PhotonNetwork.LeaveRoom();
@@ -16,14 +19,21 @@ namespace Photon
 
         public override void OnLeftRoom()
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene("SampleScene");
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             Debug.LogFormat("Player {0} entered room", newPlayer.NickName);
             Thread.Sleep(1000);
-            MazeSpawner.Spawn();
+        }
+
+        private void Update()
+        {
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            {
+                StartBtn.interactable = true;
+            }
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
