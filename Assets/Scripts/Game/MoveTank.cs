@@ -1,7 +1,5 @@
 ﻿using System;
-using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 
 namespace Game
@@ -19,11 +17,12 @@ namespace Game
         //public GameObject tankHead;
     
 
-        private string _mMovementAxisName;          // The name of the input axis for moving forward and back.
-        private string _mTurnAxisName;              // The name of the input axis for turning.
-        private Rigidbody _mRigidbody;              // Reference used to move the tank.
-        private float _mMovementInputValue;         // The current value of the movement input.
-        private float _mTurnInputValue;             // The current value of the turn input.
+        private string _mMovementAxisName;
+        private string _mTurnAxisName;
+        private Rigidbody _mRigidbody;
+        private float _mMovementInputValue;
+        private float _mTurnInputValue;
+        public Joystick joystick;
 
 
         private void Awake ()
@@ -52,27 +51,35 @@ namespace Game
 
         private void Start ()
         {
-            if(!gameObject.GetComponent<PhotonView>().IsMine)
+            if (!gameObject.GetComponent<PhotonView>().IsMine)
             {
                 gameObject.GetComponentInChildren<Camera>().gameObject.SetActive(false);
                 return;
             }
+
             //m_MovementAudio = this.gameObject.GetComponent<AudioSource>();
-            // The axes names are based on player number.
             _mMovementAxisName = "Vertical";
             _mTurnAxisName = "Horizontal";
-
-            // Store the original pitch of the audio source.
+            if (Application.platform == RuntimePlatform.Android)
+                joystick = GameObject.Find("Fixed Joystick").GetComponent<Joystick>();
             //m_OriginalPitch = m_MovementAudio.pitch;
         }
 
 
         private void Update ()
         {
-            // Store the value of both input axes.
             if (!gameObject.GetComponent<PhotonView>().IsMine) return;
-            _mMovementInputValue = Input.GetAxis(_mMovementAxisName);
-            _mTurnInputValue = Input.GetAxis(_mTurnAxisName);
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                _mMovementInputValue = joystick.Vertical;
+                _mTurnInputValue = joystick.Horizontal;
+            }
+            else
+            {
+                _mMovementInputValue = Input.GetAxis(_mMovementAxisName);
+                _mTurnInputValue = Input.GetAxis(_mTurnAxisName);
+            }
+
             //EngineAudio ();
         }
 
@@ -128,15 +135,14 @@ namespace Game
             if(!gameObject.GetComponent<PhotonView>().IsMine) return;
             if (Math.Abs(_mTurnInputValue) > 0 && _mRigidbody.velocity != new Vector3(0, 0, 0))
             {
-                var velocity = _mRigidbody.velocity;
-                _mRigidbody.velocity = -transform.forward * 
-                                       (float)Math.Sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+                var velocity1 = _mRigidbody.velocity;
+                var velocity = velocity1;
+                _mRigidbody.velocity = -transform.forward * ((float)Math.Sqrt(velocity.x * velocity.x + velocity.z * velocity.z) * Math.Abs(_mMovementInputValue)) / _mMovementInputValue;
             }
-
+            
             var turn = _mTurnInputValue * mTurnSpeed * Time.deltaTime * 3;
             var turnRotation = Quaternion.Euler (0f, turn, 0f);
             _mRigidbody.MoveRotation (_mRigidbody.rotation * turnRotation);
-            
         }
     }
 }

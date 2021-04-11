@@ -58,7 +58,8 @@ namespace Game
             cells[1, 1].WallCenter = false;
 
             RemoveWallsWithBacktracker(cells);
-
+            
+            size.gameObject.SetActive(false);
             var maze = new Maze {Cells = cells};
             return maze;
 

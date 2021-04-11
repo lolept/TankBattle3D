@@ -32,7 +32,7 @@ namespace Game
 
         public void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "Wall")
+            if (other.CompareTag("Wall"))
             {
                 destroy = other.gameObject;
                 _type = Random.Range(0, 1);
@@ -56,63 +56,21 @@ namespace Game
                 PhotonNetwork.RaiseEvent(199, destroy.GetPhotonView().ViewID, new RaiseEventOptions {Receivers = ReceiverGroup.Others},
                     new SendOptions {Reliability = true});
                 destroy.SetActive(false);
-                this.gameObject.SetActive(false);
-            
+                gameObject.SetActive(false);
             }
+            
             else if (other.CompareTag("floor"))
             {
-                /*
-            Instantiate(G, this.gameObject.transform.position, Quaternion.identity);
+                PhotonNetwork.Instantiate(F.name, gameObject.transform.position, Quaternion.identity);
             for (int i = 0; i < 2; i++)
             { 
                 PSS[i].Play();
             }
-            ASS.Play();
-            */
-                this.gameObject.SetActive(false);
-                PhotonNetwork.RaiseEvent(199, destroy.GetPhotonView().ViewID, new RaiseEventOptions {Receivers = ReceiverGroup.Others},
+            gameObject.SetActive(false);
+                PhotonNetwork.RaiseEvent(199, -1, new RaiseEventOptions {Receivers = ReceiverGroup.Others},
                     new SendOptions {Reliability = true});
             }
-            else if (other.CompareTag("Enemy"))
-            {
-                destroy = other.gameObject;
-                if (destroy.name == "Enemyhead");
-                {
-                    tankDestroy = destroy.transform.parent;
-                }
-                /*
-            type = UnityEngine.Random.Range(0, 1);
-            if (type == 0)
-            {
-                if(destroy.name == "Enemyhead")
-                    Instantiate(F, TankDestroy.transform.position, Quaternion.identity);
-                else
-                    Instantiate(F, destroy.transform.position, Quaternion.identity);
-                for (int i = 0; i < 2; i++)
-                {
-                    PSF[i].Play();
-                }
-                ASF.Play();
-            }
-            else if (type == 1)
-            {
-                if(destroy.name == "Enemyhead")
-                    Instantiate(S, TankDestroy.transform.position, Quaternion.identity);
-                else
-                    Instantiate(S, destroy.transform.position, Quaternion.identity);
-                for (int i = 0; i < 2; i++)
-                {
-                    PSS[i].Play();
-                }
-                ASS.Play();
-            }
-*/
-                if (destroy.name == "Enemyhead")
-                    tankDestroy.gameObject.SetActive(false);
-                else
-                    destroy.SetActive(false);
-                this.gameObject.SetActive(false);
-            }
+            
             else if (other.CompareTag("Player"))
             {
                 destroy = other.gameObject;
@@ -147,7 +105,7 @@ namespace Game
                 //GameObject.Find("defaultHead").GetComponentInChildren<Camera>().gameObject.SetActive(false);
                 destroy.SetActive(false);
                 //Instantiate(DeathCam, this.gameObject.transform.position, Quaternion.identity);
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
                 PhotonNetwork.RaiseEvent(199, destroy.GetPhotonView().ViewID, new RaiseEventOptions {Receivers = ReceiverGroup.Others},
                     new SendOptions {Reliability = true});
             }

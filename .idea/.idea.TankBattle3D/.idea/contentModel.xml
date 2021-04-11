@@ -4,9 +4,34 @@
     <e p="C:\Users\lolep\.Rider2019.3\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\lolep\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_TankBattle3D.-68538443.00" t="ExcludeRecursive" />
     <e p="C:\Users\lolep\TankBattle3D" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="ExternalDependencyManager" t="Include">
+          <e p="Editor" t="Include">
+            <e p="external-dependency-manager_version-1.2.164_manifest.txt" t="Include" />
+          </e>
+        </e>
+        <e p="Joystick Pack" t="Include">
+          <e p="Scripts" t="Include">
+            <e p="Base" t="Include">
+              <e p="Joystick.cs" t="Include" />
+            </e>
+            <e p="Editor" t="Include">
+              <e p="DynamicJoystickEditor.cs" t="Include" />
+              <e p="FloatingJoystickEditor.cs" t="Include" />
+              <e p="JoystickEditor.cs" t="Include" />
+              <e p="VariableJoystickEditor.cs" t="Include" />
+            </e>
+            <e p="Joysticks" t="Include">
+              <e p="DynamicJoystick.cs" t="Include" />
+              <e p="FixedJoystick.cs" t="Include" />
+              <e p="FloatingJoystick.cs" t="Include" />
+              <e p="VariableJoystick.cs" t="Include" />
+            </e>
+          </e>
+        </e>
         <e p="Photon" t="Include">
           <e p="PhotonLibs" t="Include">
             <e p="changes-library.txt" t="Include" />
@@ -343,9 +368,6 @@
           <e p="Game" t="Include">
             <e p="BOOM.cs" t="Include" />
             <e p="Cell.cs" t="Include" />
-            <e p="EnemyControl.cs" t="Include" />
-            <e p="EnemyShoot.cs" t="Include" />
-            <e p="EnemySpawner.cs" t="Include" />
             <e p="HeadRotation.cs" t="Include" />
             <e p="Maze.cs" t="Include" />
             <e p="MazeGenerator.cs" t="Include" />

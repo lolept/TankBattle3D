@@ -4,6 +4,7 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -18,9 +19,12 @@ namespace Game
         public Cell luckyWall;
         public static Cell IronWall;
         public Cell ironWall;
+        
         private static int _type;
+        
         public static GameObject FrameBlock;
         public GameObject frameBlock;
+        
         private static readonly Vector3 CellSize = new Vector3(20, 0, 20);
 
         public static Maze Maze;
@@ -32,6 +36,9 @@ namespace Game
 
         private static GameObject _tank;
         public GameObject tank;
+
+        private static GameObject _startBtn;
+        public GameObject startBtn;
 
         private void Start()
         {
@@ -45,12 +52,14 @@ namespace Game
             LuckyWall = luckyWall;
             IronWall = ironWall;
             FrameBlock = frameBlock;
+            _startBtn = startBtn;
         }
 
         public static void Spawn()
         {
             if (!PhotonNetwork.IsMasterClient) return;
             Thread.Sleep(100);
+            _startBtn.SetActive(false);
             // ReSharper disable once Unity.IncorrectMonoBehaviourInstantiation
             var generator = new MazeGenerator();
             Maze = generator.GenerateMaze();

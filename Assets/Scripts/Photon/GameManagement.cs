@@ -12,6 +12,13 @@ namespace Photon
     public class GameManagement : MonoBehaviourPunCallbacks
     {
         public Button StartBtn;
+        public Joystick joystick;
+        private void Start()
+        {
+            if(Application.platform != RuntimePlatform.Android)
+                joystick.gameObject.SetActive(false);
+        }
+
         public void Leave()
         {
             PhotonNetwork.LeaveRoom();

@@ -14927,7 +14927,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7848051614654318492}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -15023,8 +15023,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mSpeed: 12
-  mTurnSpeed: 50
+  mTurnSpeed: 12
   tank: {fileID: 7848051614654318492}
+  joystick: {fileID: 0}
 --- !u!114 &636271553783859255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15043,10 +15044,10 @@ MonoBehaviour:
   head: {fileID: 6685810807813232983}
   tankRb: {fileID: 0}
   reloading: 0
-  bulletForce: 1000000
+  bulletForce: 300000
   ps: {fileID: 685010529701440261}
   aS: {fileID: 0}
-  zaeBall: {fileID: 0}
+  shoot: {fileID: 0}
 --- !u!54 &3144149270089169525
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15062,7 +15063,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!65 &989163104147812274
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15252,6 +15253,7 @@ MonoBehaviour:
   go: {fileID: 7848051614654318492}
   goHead: {fileID: 6685810807813232983}
   goDulo: {fileID: 16876062857316625}
+  sensitivity: 1
   mouseLook:
     XSensitivity: 0.4
     YSensitivity: 0.1
@@ -15261,3 +15263,4 @@ MonoBehaviour:
     smooth: 1
     smoothTime: 3
     lockCursor: 1
+  joystick: {fileID: 0}

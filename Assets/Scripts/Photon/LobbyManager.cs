@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -17,10 +18,17 @@ namespace Photon
         private void Start()
         {
             Log("Players name is " + PlayerPrefs.GetString("Name", "a"));
-
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.GameVersion = "1";
             PhotonNetwork.ConnectUsingSettings();
+        }
+
+        private void Awake()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         public override void OnConnectedToMaster()
