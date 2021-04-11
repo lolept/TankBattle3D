@@ -602,7 +602,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.391
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -1729,7 +1729,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1601167888}
   - component: {fileID: 1601167887}
-  - component: {fileID: 1601167886}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1737,14 +1736,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1601167886
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601167885}
-  m_Enabled: 1
 --- !u!20 &1601167887
 Camera:
   m_ObjectHideFlags: 0

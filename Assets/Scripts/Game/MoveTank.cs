@@ -1,89 +1,87 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
-public class MoveTank : MonoBehaviour
+namespace Game
 {
-    public int m_PlayerNumber = 1;              // Used to identify which tank belongs to which player.  This is set by this tank's manager.
-    public float m_Speed = 12f;                 // How fast the tank moves forward and back.
-    public float m_TurnSpeed = 50f;            // How fast the tank turns in degrees per second.
-    //public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
-    //public AudioClip m_EngineIdling;            // Audio to play when the tank isn't moving.
-    //public AudioClip m_EngineDriving;           // Audio to play when the tank is moving.
-    public float m_PitchRange = 0.2f;             // The amount by which the pitch of the engine noises can vary.
-    public GameObject Tank;
-    public GameObject TankHead;
+    public class MoveTank : MonoBehaviourPunCallbacks
+    {
+        //public int mPlayerNumber = 1;              // Used to identify which tank belongs to which player.  This is set by this tank's manager.
+        public float mSpeed = 12f;                 // How fast the tank moves forward and back.
+        public float mTurnSpeed = 50f;            // How fast the tank turns in degrees per second.
+        //public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
+        //public AudioClip m_EngineIdling;            // Audio to play when the tank isn't moving.
+        //public AudioClip m_EngineDriving;           // Audio to play when the tank is moving.
+        //public float mPitchRange = 0.2f;             // The amount by which the pitch of the engine noises can vary.
+        public GameObject tank;
+        //public GameObject tankHead;
     
 
-    private string m_MovementAxisName;          // The name of the input axis for moving forward and back.
-    private string m_TurnAxisName;              // The name of the input axis for turning.
-    private Rigidbody m_Rigidbody;              // Reference used to move the tank.
-    private float m_MovementInputValue;         // The current value of the movement input.
-    private float m_OldMovementInputValue;
-    private float m_TurnInputValue;             // The current value of the turn input.
-    private float m_OriginalPitch;              // The pitch of the audio source at the start of the scene.
+        private string _mMovementAxisName;          // The name of the input axis for moving forward and back.
+        private string _mTurnAxisName;              // The name of the input axis for turning.
+        private Rigidbody _mRigidbody;              // Reference used to move the tank.
+        private float _mMovementInputValue;         // The current value of the movement input.
+        private float _mTurnInputValue;             // The current value of the turn input.
 
 
-    private void Awake ()
-    {
-        if(!gameObject.GetComponent<PhotonView>().IsMine) return;
-        m_Rigidbody = Tank.GetComponent<Rigidbody> ();
-    }
-
-
-    private void OnEnable ()
-    {
-        if(!gameObject.GetComponent<PhotonView>().IsMine) return;
-        // When the tank is turned on, make sure it's not kinematic.
-        m_Rigidbody.isKinematic = false;
-
-        // Also reset the input values.
-        m_MovementInputValue = 0f;
-        m_TurnInputValue = 0f;
-    }
-
-
-    private void OnDisable ()
-    {
-        if(!gameObject.GetComponent<PhotonView>().IsMine) return;
-        // When the tank is turned off, set it to kinematic so it stops moving.
-        m_Rigidbody.isKinematic = true;
-    }
-
-
-    private void Start ()
-    {
-        if(!gameObject.GetComponent<PhotonView>().IsMine)
+        private void Awake ()
         {
-            gameObject.GetComponentInChildren<Camera>().gameObject.SetActive(false);
-            return;
+            _mRigidbody = tank.GetComponent<Rigidbody> ();
         }
-        //m_MovementAudio = this.gameObject.GetComponent<AudioSource>();
-        // The axes names are based on player number.
-        m_MovementAxisName = "Vertical";
-        m_TurnAxisName = "Horizontal";
-
-        // Store the original pitch of the audio source.
-        //m_OriginalPitch = m_MovementAudio.pitch;
-    }
 
 
-    private void Update ()
-    {
-        // Store the value of both input axes.
-        if (!gameObject.GetComponent<PhotonView>().IsMine) return;
-        m_MovementInputValue = Input.GetAxis(m_MovementAxisName);
-        m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
-        EngineAudio ();
-    }
+        public override void OnEnable ()
+        {
+            // When the tank is turned on, make sure it's not kinematic.
+            _mRigidbody.isKinematic = false;
+
+            // Also reset the input values.
+            _mMovementInputValue = 0f;
+            _mTurnInputValue = 0f;
+        }
 
 
-    private void EngineAudio ()
-    {
-        if(!gameObject.GetComponent<PhotonView>().IsMine) return;
-        // If there is no input (the tank is stationary)...
-        /*if (Mathf.Abs (m_MovementInputValue) < 0.1f && Mathf.Abs (m_TurnInputValue) < 0.1f)
+        public override void OnDisable ()
+        {
+            // When the tank is turned off, set it to kinematic so it stops moving.
+            _mRigidbody.isKinematic = true;
+        }
+
+
+        private void Start ()
+        {
+            if(!gameObject.GetComponent<PhotonView>().IsMine)
+            {
+                gameObject.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+                return;
+            }
+            //m_MovementAudio = this.gameObject.GetComponent<AudioSource>();
+            // The axes names are based on player number.
+            _mMovementAxisName = "Vertical";
+            _mTurnAxisName = "Horizontal";
+
+            // Store the original pitch of the audio source.
+            //m_OriginalPitch = m_MovementAudio.pitch;
+        }
+
+
+        private void Update ()
+        {
+            // Store the value of both input axes.
+            if (!gameObject.GetComponent<PhotonView>().IsMine) return;
+            _mMovementInputValue = Input.GetAxis(_mMovementAxisName);
+            _mTurnInputValue = Input.GetAxis(_mTurnAxisName);
+            //EngineAudio ();
+        }
+
+        /*
+        private void EngineAudio ()
+        {
+            //if(!gameObject.GetComponent<PhotonView>().IsMine) return;
+            // If there is no input (the tank is stationary)...
+            if (Mathf.Abs (m_MovementInputValue) < 0.1f && Mathf.Abs (m_TurnInputValue) < 0.1f)
         {
             // ... and if the audio source is currently playing the driving clip...
             if (m_MovementAudio.clip == m_EngineDriving)
@@ -104,43 +102,41 @@ public class MoveTank : MonoBehaviour
                 m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                 m_MovementAudio.Play();
             }
-        }*/
-    }
+        }
+        }
+
+*/
+        private void FixedUpdate ()
+        {
+            if(!gameObject.GetComponent<PhotonView>().IsMine) return;
+            Move ();
+            Turn ();
+        }
 
 
-    private void FixedUpdate ()
-    {
-        //if (Tank.transform.rotation.x >= 1 || Tank.transform.rotation.z >= 1 || Tank.transform.rotation.x <= 1 || Tank.transform.rotation.z <= 1)
-            //Tank.transform.Rotate(Tank.transform.rotation.x * -1, 0, Tank.transform.rotation.z * -1);
-        //TankHead.transform.position = new Vector3(Tank.transform.position.x, Tank.transform.position.y + 2.6f, Tank.transform.position.z + 0.1f);
-        // Adjust the rigidbodies position and orientation in FixedUpdate.
-        if(!gameObject.GetComponent<PhotonView>().IsMine) return;
-        Move ();
-        Turn ();
-    }
+        private void Move ()
+        {
+            if(!gameObject.GetComponent<PhotonView>().IsMine) return;
+            if(_mRigidbody.velocity.x >= 10 || _mRigidbody.velocity.x <= -10 || _mRigidbody.velocity.z >= 10 || _mRigidbody.velocity.z <= -10) return;
+            if (Math.Abs(_mMovementInputValue) < 0.01f) return;
+            _mRigidbody.AddForce(transform.forward * (-1 * _mMovementInputValue * mSpeed * _mRigidbody.mass * 2));
+        }
 
 
-    private void Move ()
-    {
-        if(!gameObject.GetComponent<PhotonView>().IsMine) return;
-        // Create a vector in the direction the tank is facing with a magnitude based on the input, speed and the time between frames.
-        Vector3 movement = -1 * transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
-        //TankHead.transform.position = new Vector3(Tank.transform.position.x, Tank.transform.position.y + 2.6f, Tank.transform.position.z + 0.1f);
-        // Apply this movement to the rigidbody's position.
-        m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
-    }
+        private void Turn ()
+        {
+            if(!gameObject.GetComponent<PhotonView>().IsMine) return;
+            if (Math.Abs(_mTurnInputValue) > 0 && _mRigidbody.velocity != new Vector3(0, 0, 0))
+            {
+                var velocity = _mRigidbody.velocity;
+                _mRigidbody.velocity = -transform.forward * 
+                                       (float)Math.Sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+            }
 
-
-    private void Turn ()
-    {
-        if(!gameObject.GetComponent<PhotonView>().IsMine) return;
-        // Determine the number of degrees to be turned based on the input, speed and time between frames.
-        float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
-        //TankHead.transform.position = new Vector3(Tank.transform.position.x, Tank.transform.position.y + 2.6f, Tank.transform.position.z + 0.1f);
-        // Make this into a rotation in the y axis.
-        Quaternion turnRotation = Quaternion.Euler (0f, turn, 0f);
-
-        // Apply this rotation to the rigidbody's rotation.
-        m_Rigidbody.MoveRotation (m_Rigidbody.rotation * turnRotation);
+            var turn = _mTurnInputValue * mTurnSpeed * Time.deltaTime * 3;
+            var turnRotation = Quaternion.Euler (0f, turn, 0f);
+            _mRigidbody.MoveRotation (_mRigidbody.rotation * turnRotation);
+            
+        }
     }
 }

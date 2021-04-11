@@ -30,7 +30,7 @@ namespace Photon
 
         private void Update()
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= 1)
             {
                 StartBtn.interactable = true;
             }
