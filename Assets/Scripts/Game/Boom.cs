@@ -8,9 +8,9 @@ namespace Game
     public class Boom : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         public GameObject destroy;
-        public Transform tankDestroy;
         public GameObject F;
         public GameObject S;
+        public GameObject deathCum;
         // public GameObject G;
         //public Camera DeathCam;
         public ParticleSystem[] PSF;
@@ -55,8 +55,10 @@ namespace Game
                 }
                 PhotonNetwork.RaiseEvent(199, destroy.GetPhotonView().ViewID, new RaiseEventOptions {Receivers = ReceiverGroup.Others},
                     new SendOptions {Reliability = true});
-                destroy.SetActive(false);
-                gameObject.SetActive(false);
+                Destroy(destroy);
+                Destroy(gameObject);
+                //destroy.SetActive(false);
+                //gameObject.SetActive(false);
             }
             
             else if (other.CompareTag("floor"))
@@ -103,6 +105,10 @@ namespace Game
 */
             
                 //GameObject.Find("defaultHead").GetComponentInChildren<Camera>().gameObject.SetActive(false);
+                if (destroy.GetPhotonView().AmOwner)
+                {
+                    Instantiate(deathCum, destroy.transform.position, Quaternion.identity);
+                }
                 destroy.SetActive(false);
                 //Instantiate(DeathCam, this.gameObject.transform.position, Quaternion.identity);
                 gameObject.SetActive(false);
@@ -117,12 +123,14 @@ namespace Game
             switch (photonEvent.Code)
             {
                 case 199:
-                    gameObject.SetActive(false);
+                    //gameObject.SetActive(false);
                     if ((int) photonEvent.CustomData != -1)
                     {
                         var dest = PhotonView.Find((int) photonEvent.CustomData).gameObject;
-                        dest.SetActive(false);
+                        Destroy(dest);
+                        //dest.SetActive(false);
                     }
+                    Destroy(gameObject);
                     break;
             }
         }

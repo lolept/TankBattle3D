@@ -1,47 +1,45 @@
 ﻿using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Game
 {
     public class Shooting : MonoBehaviour
     {
-        public Transform bullet;
-        public GameObject spawn;
-        public GameObject body;
-        public GameObject head;
-        public Rigidbody tankRb;
-        public float reloading;
-        public int bulletForce = 5000;
-        public ParticleSystem ps;
-        public AudioSource aS;
-        public Button shoot;
+        [SerializeField] private GameObject spawn;
+        [SerializeField] private GameObject body;
+        [SerializeField] private int bulletForce = 5000;
+        [SerializeField] private ParticleSystem ps;
+        private Rigidbody _tankRb;
+        private float _reloading;
+        private AudioSource _aS;
+        private Button _shoot;
 
-        private void Start()
+        private void Awake()
         {
             if(!body.GetPhotonView().IsMine) return;
-            shoot = GameObject.Find("ShootBtn").GetComponent<Button>();
-            tankRb = body.GetComponent<Rigidbody>();
-            shoot.onClick.AddListener(Shoot);
+            if(Application.platform == RuntimePlatform.Android) 
+                _shoot = GameObject.Find("ShootBtn").GetComponent<Button>();
+            _tankRb = body.GetComponent<Rigidbody>();
             //aS = GameObject.Find("tank_player1_head").GetComponent<AudioSource>();
         }
 
         private void Update()
         {
             if(!body.GetPhotonView().IsMine) return;
-            reloading -= Time.deltaTime;
-            if (!Input.GetMouseButtonDown(1)) return;
-            Shoot();
-            //aS.Play();
+            _reloading -= Time.deltaTime;
+            if(Application.platform == RuntimePlatform.Android && _shoot.onClick.GetPersistentTarget(0).name.Equals("ShootBtn"))
+                _shoot.onClick.AddListener(Shoot);
         }
 
         public void Shoot()
         {
-            if (reloading > 0) return;
+            if (_reloading > 0) return;
             var forward = spawn.transform.forward;
-            tankRb.AddForce(forward * (450 * 0.015f), ForceMode.VelocityChange);
+            _tankRb.AddForce(forward * (450 * 0.015f), ForceMode.VelocityChange);
             var angles = spawn.transform.rotation.eulerAngles;
-            reloading = 5.0f;
+            _reloading = 5.0f;
             var bulletInstance = PhotonNetwork.Instantiate("Bullet", spawn.transform.position, Quaternion.identity);
             bulletInstance.transform.localRotation = Quaternion.Euler(90, angles.y - 180, 0);
             bulletInstance.GetComponent<Rigidbody>().AddForce(-forward * (bulletForce * 0.02f), ForceMode.Impulse);

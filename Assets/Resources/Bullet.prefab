@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8469494145858465668, guid: a34ab61d42f7f9f429ce225af17788f6, type: 3}
+  - {fileID: 2100000, guid: 0807dfae05f2e444983d2b2277582b19, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroy: {fileID: 0}
-  tankDestroy: {fileID: 0}
   F: {fileID: 8298308715927120057, guid: 8ab3f1628f1fa674abae33f0d4a204c4, type: 3}
   S: {fileID: 8298308715927120057, guid: 8ab3f1628f1fa674abae33f0d4a204c4, type: 3}
+  deathCum: {fileID: 0}
   PSF: []
   PSS: []

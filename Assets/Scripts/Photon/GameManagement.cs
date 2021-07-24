@@ -1,6 +1,6 @@
 using System;
 using System.Threading;
-using Game;
+using Joystick_Pack.Scripts.Base;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -11,12 +11,18 @@ namespace Photon
 {
     public class GameManagement : MonoBehaviourPunCallbacks
     {
-        public Button StartBtn;
-        public Joystick joystick;
-        private void Start()
+        [SerializeField] private Button startBtn;
+        [SerializeField] private Joystick joystick;
+        [SerializeField] private Button shootButton;
+        [SerializeField] private Text sizeText;
+        [SerializeField] private Slider size;
+
+        private void Awake()
         {
-            if(Application.platform != RuntimePlatform.Android)
-                joystick.gameObject.SetActive(false);
+            Application.targetFrameRate = 60;
+            QualitySettings.vSyncCount = 0;
+            Debug.LogError(Application.targetFrameRate+"fps");
+            Debug.LogError(QualitySettings.vSyncCount);
         }
 
         public void Leave()
@@ -33,19 +39,19 @@ namespace Photon
         {
             Debug.LogFormat("Player {0} entered room", newPlayer.NickName);
             Thread.Sleep(1000);
-        }
-
-        private void Update()
-        {
             if (PhotonNetwork.CurrentRoom.PlayerCount >= 1)
-            {
-                StartBtn.interactable = true;
-            }
+                startBtn.interactable = true;
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             Debug.LogFormat("Player {0} left room", otherPlayer.NickName);
+        }
+
+        public void UpdateSize()
+        {
+            var value = (int)size.value * 2;
+            sizeText.text = value.ToString();
         }
     }
 }

@@ -9,13 +9,13 @@ namespace Game
     {
         private int _width = 15;
         private int _height = 15;
-        public Dropdown size;
+        public Slider size;
         public GameObject plane;
 
         public Maze GenerateMaze()
         {
-            size = GameObject.Find("Size").GetComponent<Dropdown>();
-            _width = size.value + 10;
+            size = GameObject.Find("Size selector").GetComponent<Slider>();
+            _width = (int)size.value;
             _height = _width;
             plane = PhotonNetwork.Instantiate("Floor", new Vector3((_width * 10) - 5, 0, (_height * 10) - 5),
                 Quaternion.identity);

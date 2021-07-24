@@ -1,4 +1,5 @@
 ﻿using System;
+using Joystick_Pack.Scripts.Base;
 using Photon.Pun;
 using UnityEngine;
 
@@ -56,7 +57,7 @@ namespace Game
                 gameObject.GetComponentInChildren<Camera>().gameObject.SetActive(false);
                 return;
             }
-
+            gameObject.GetComponentInChildren<Camera>().gameObject.SetActive(true);
             //m_MovementAudio = this.gameObject.GetComponent<AudioSource>();
             _mMovementAxisName = "Vertical";
             _mTurnAxisName = "Horizontal";
@@ -137,7 +138,7 @@ namespace Game
             {
                 var velocity1 = _mRigidbody.velocity;
                 var velocity = velocity1;
-                _mRigidbody.velocity = -transform.forward * ((float)Math.Sqrt(velocity.x * velocity.x + velocity.z * velocity.z) * Math.Abs(_mMovementInputValue)) / _mMovementInputValue;
+                _mRigidbody.velocity = -transform.forward * ((float)Math.Sqrt(velocity.x * velocity.x + velocity.z * velocity.z) * Math.Abs(_mMovementInputValue) / _mMovementInputValue);
             }
             
             var turn = _mTurnInputValue * mTurnSpeed * Time.deltaTime * 3;

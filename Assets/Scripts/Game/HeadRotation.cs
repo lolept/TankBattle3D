@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Joystick_Pack.Scripts.Base;
 using Photon.Pun;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
@@ -17,7 +17,7 @@ namespace Game
 
         public Joystick joystick;
 
-        private void Start()
+        private void Awake()
         {
             if(!go.GetPhotonView().IsMine) return;
             if (Application.platform == RuntimePlatform.Android)
