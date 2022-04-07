@@ -1,7 +1,7 @@
 using Photon.Pun;
 using System;
 using UnityEngine;
-using Joystick_Pack.Scripts.Base;
+using UnityStandardAssets.Cameras;
 using UnityStandardAssets.CrossPlatformInput;
 using Joystick = Joystick_Pack.Scripts.Base.Joystick;
 
@@ -18,17 +18,20 @@ namespace Game.Tank
 
         private void Awake()
         {
-            if(!gameObject.GetPhotonView().IsMine) return;
+            if(!gameObject.GetPhotonView().IsMine)
+            {
+                gameObject.GetComponentInChildren<AutoCam>().gameObject.SetActive(false);
+                Destroy(this);
+            }
             _mCar = GetComponent<CarController>();
             _mShooting = GetComponent<Shooting>();
-            if(Application.platform == RuntimePlatform.Android)
-                joystick = GameObject.Find("Fixed Joystick").GetComponent<Joystick>();
+            if (Application.platform == RuntimePlatform.Android)
+                joystick = FindObjectOfType<FixedJoystick>(true);
         }
 
 
         private void FixedUpdate()
         {
-            if(!gameObject.GetPhotonView().IsMine) return;
             float h;
             float v;
             int shoot;

@@ -6,17 +6,18 @@ TagManager:
   tags:
   - Wall
   - floor
+  - Bullet
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Tank
   - Water
   - UI
   - Ignore reflections
-  - 
-  - 
-  - 
+  - Minimap Icon
+  - Floor
+  - Fl2
   - 
   - 
   - 

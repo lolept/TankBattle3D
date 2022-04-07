@@ -1,25 +1,22 @@
 ﻿using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game
 {
     public class MazeGenerator : MonoBehaviourPunCallbacks
     {
-        private int _width = 15;
-        private int _height = 15;
-        public Slider size;
-        public GameObject plane;
+        private int _width = 20;
+        private int _height = 20;
+        private GameObject _plane;
 
         public Maze GenerateMaze()
         {
-            size = GameObject.Find("Size selector").GetComponent<Slider>();
-            _width = (int)size.value;
+            _width = PlayerPrefs.GetInt("MapSize", 20);
             _height = _width;
-            plane = PhotonNetwork.Instantiate("Floor", new Vector3((_width * 10) - 5, 0, (_height * 10) - 5),
+            _plane = PhotonNetwork.InstantiateRoomObject("Floor", new Vector3((_width * 10) - 5, 0, (_height * 10) - 5),
                 Quaternion.identity);
-            plane.transform.localScale = new Vector3(_width * 2, 1, _height * 2);
+            _plane.transform.localScale = new Vector3(_width * 2, 1, _height * 2);
             var cells = new MazeGeneratorCell[_width, _height];
 
             for (var x = 0; x < cells.GetLength(0); x++)
@@ -59,7 +56,6 @@ namespace Game
 
             RemoveWallsWithBacktracker(cells);
             
-            size.gameObject.SetActive(false);
             var maze = new Maze {Cells = cells};
             return maze;
 

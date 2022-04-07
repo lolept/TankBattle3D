@@ -1,57 +1,112 @@
 using System;
-using System.Threading;
-using Joystick_Pack.Scripts.Base;
+using System.Collections.Generic;
+using Photon.LobbyTypes;
 using Photon.Pun;
-using Photon.Realtime;
+using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = Photon.LobbyTypes.Random;
 
 namespace Photon
 {
-    public class GameManagement : MonoBehaviourPunCallbacks
+    public class GameManagement : MonoBehaviour
     {
-        [SerializeField] private Button startBtn;
-        [SerializeField] private Joystick joystick;
-        [SerializeField] private Button shootButton;
-        [SerializeField] private Text sizeText;
-        [SerializeField] private Slider size;
+        [SerializeField] public Dictionary<string, int> healthPoints = new Dictionary<string, int>();
+        public PlayerInfo[] players;
+        public PlayerStats[] hps;
+        
+        [Header("Ui")]
+        public Button readyBtn;
+        public Text roomName;
+        public Slider size;
+        public Text sizeText;
+        public Button startBtn;
+        public TMP_Text startTimer;
+        public GameObject timer;
+        
+        [Header("Button variants")]
+        public Sprite[] startBtnVariants;
+        public Sprite[] readyBtnVariants;
+        
+        public Private privateRoom;
+        public Random randomRoom;
+        public Ranked rankedRoom;
+
+        public enum RoomType
+        {
+            Random,
+            Ranked,
+            Private
+        };
+
+        public RoomType roomType;
+
+        public bool started;
 
         private void Awake()
         {
-            Application.targetFrameRate = 60;
-            QualitySettings.vSyncCount = 0;
-            Debug.LogError(Application.targetFrameRate+"fps");
-            Debug.LogError(QualitySettings.vSyncCount);
+            var roomNameStr = PhotonNetwork.CurrentRoom.Name;
+            if (roomNameStr.Contains("Random"))
+            {
+                roomType = RoomType.Random;
+                randomRoom = gameObject.AddComponent<Random>();
+                randomRoom.StartRoom();
+            }
+            else if (roomNameStr.Contains("Ranked"))
+            {
+                roomType = RoomType.Ranked;
+                rankedRoom = gameObject.AddComponent<Ranked>();
+                rankedRoom.StartRoom();
+            }
+            else
+            {
+                roomType = RoomType.Private;
+                privateRoom = gameObject.AddComponent<Private>();
+                privateRoom.StartRoom();
+            }
         }
+
 
         public void Leave()
         {
             PhotonNetwork.LeaveRoom();
         }
 
-        public override void OnLeftRoom()
+        public void KickPlayer(int ind)
         {
-            SceneManager.LoadScene("SampleScene");
+            privateRoom.KickPlayer(ind);
         }
 
-        public override void OnPlayerEnteredRoom(Player newPlayer)
+        public void SetReady()
         {
-            Debug.LogFormat("Player {0} entered room", newPlayer.NickName);
-            Thread.Sleep(1000);
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= 1)
-                startBtn.interactable = true;
-        }
-
-        public override void OnPlayerLeftRoom(Player otherPlayer)
-        {
-            Debug.LogFormat("Player {0} left room", otherPlayer.NickName);
+            switch (roomType)
+            {
+                case RoomType.Private:
+                    privateRoom.SetReady();
+                    break;
+                case RoomType.Random:
+                    break;
+                case RoomType.Ranked:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public void UpdateSize()
         {
-            var value = (int)size.value * 2;
-            sizeText.text = value.ToString();
+            switch (roomType)
+            {
+                case RoomType.Private:
+                    privateRoom.UpdateSize();
+                    break;
+                case RoomType.Random:
+                    break;
+                case RoomType.Ranked:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

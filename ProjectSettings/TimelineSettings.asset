@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assetDefaultFramerate: 360
+  m_DefaultFrameRate: 360
